@@ -64,4 +64,18 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
+  def samedirector
+    #lógica en el model. Falta ver el caso director=nil, devuelve todas las pelis
+    #@director = Movie.find(params[:id]).director
+    #@movies = Movie.find_all_by_director(@director)
+    @movie = Movie.find(params[:id])
+    @movies = Movie.find_same_director(params[:id])
+    @director = @movie.director   #siempre habrá mínimo una peli porque vienes de una peli con ese director
+    if @director == nil || @director == ""
+      flash[:notice] = "'#{@movie.title}' has no director info"
+      flash.keep
+      redirect_to movies_path and return
+    end
+  end
+
 end
